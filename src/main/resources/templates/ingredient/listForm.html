@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{ :: body}, 'ingredientsListAndForm')}">
+<head>
+    <meta charset="UTF-8">
+    <title>From ingredients</title>
+</head>
+<body>
+<div class="container">
+    <h1 class="title text-center">Ingredients</h1>
+    <br/>
+    <p class="text-center">
+        <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#ingredientForm"
+                aria-expanded="false" aria-controls="ingredientForm">
+            New ingredient
+        </button>
+    </p>
+    <form id="form" method="post">
+        <input type="hidden" id="recipeId" th:value="${recipe.id}"/>
+        <div class="collapse" id="ingredientForm">
+            <div class="card card-body">
+                <div class="form-row">
+                    <div class="form-group col-md-5">
+                        <label for="name">Name</label>
+                        <input type="text" class="form-control" id="name" maxlength="34">
+                        <div class="invalid-feedback">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-3">
+                        <label for="amount">Amount</label>
+                        <input type="number" class="form-control" id="amount" value="0">
+                        <div class="invalid-feedback">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="measure">Measure</label>
+                        <select class="form-control" id="measure">
+                            <option th:each="measure : ${T(com.portfolio.recipebook.model.MeasureOfIngredient).values()}"
+                                    th:value="${measure}" th:text="${measure}"></option>
+                        </select>
+                    </div>
+                </div>
+                <button type="button" id="submitBtn" class="btn btn-primary">Submit</button>
+            </div>
+        </div>
+    </form>
+    <table th:else="${recipe.ingredients.isEmpty()}" class="table table-striped list-ingredients">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Measure</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="ingredient : ${recipe.ingredients}">
+            <th scope="row" th:text="${ingredient.id}"></th>
+            <td th:text="${ingredient.name}"></td>
+            <td th:text="${ingredient.amount}"></td>
+            <td th:text="${ingredient.measure}"></td>
+            <td><a th:href="@{/recipes/__${recipe.id}__/ingredients/__${ingredient.id}__}" class="text-danger delete-link">Delete</a></td>
+        </tr>
+        </tbody>
+    </table>
+    <h2 class="text-muted text-center" th:if="${recipe.ingredients.isEmpty()}">
+        List is Empty
+    </h2>
+    <a class="btn btn-primary mb-5" th:href="@{/recipes/__${recipe.id}__/form}" role="button">Previous</a>
+    <a class="btn btn-primary mb-5" th:href="@{/recipes/__${recipe.id}__/steps}" role="button">Next</a>
+</div>
+<script th:src="@{/js/ingredient/ingredientPage.js}"></script>
+</body>
+</html>

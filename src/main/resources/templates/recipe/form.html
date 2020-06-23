@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{fragments/layout :: layout(~{ :: body}, 'createRecipe')}">
+<head>
+    <meta charset="UTF-8">
+    <title>Creating or updating form for recipe</title>
+</head>
+<body>
+<div class="container">
+    <h1 class="title">New recipe</h1>
+    <form id="form" class="form" method="post" enctype="multipart/form-data">
+        <input type="hidden" id="recipeId" th:if="${recipe}" th:value="${recipe.id}">
+        <input type="hidden" id="userId" th:value="${user}" name="userId">
+        <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" class="form-control" id="title" name="title" placeholder="Example" maxlength="34">
+            <div class="invalid-feedback">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="3" maxlength="350"></textarea>
+            <div class="invalid-feedback">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="imageRecipe">Choose image</label>
+            <input name="image" type="file" class="form-control-file" id="imageRecipe" accept="image/png, image/jpeg"
+            alt="imageRecipe">
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-6">
+                <label for="difficulty">Difficulty</label>
+                <select class="form-control" id="difficulty" name="difficulty">
+                    <option th:each="difficulty : ${T(com.portfolio.recipebook.model.Difficulty).values()}"
+                    th:value="${difficulty}" th:text="${difficulty}"></option>
+                </select>
+            </div>
+            <div class="form-group col-md-6">
+                <label for="cookTime">Cook time</label>
+                <div class="input-group">
+                    <input type="number" class="form-control" id="cookTime" name="cookTime" placeholder="Example" min="0" value="0">
+                    <div class="invalid-feedback">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <button id="submitBtn" type="button" class="btn btn-primary">Next step</button>
+    </form>
+</div>
+<script th:src="@{/js/recipe/form.js}"></script>
+</body>
+</html>

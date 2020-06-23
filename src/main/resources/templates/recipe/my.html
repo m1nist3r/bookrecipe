@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      th:replace="~{fragments/layout :: layout(~{ :: body}, 'recipeList')}">
+<head>
+    <meta charset="UTF-8">
+    <title>Recipes List</title>
+</head>
+<body>
+<div class="container">
+    <div class="d-flex mt-5 mb-3">
+        <div class="mr-auto p-2">
+            <h1>All my recipes!</h1>
+        </div>
+        <div class="p-2">
+            <a type="button" class="btn btn-danger btn-lg" href="/">Home</a>
+            <a type="button" class="btn btn-outline-primary btn-lg" href="/recipes/form"
+               sec:authorize="isAuthenticated()">New recipe</a>
+            <a type="button" class="btn btn-success btn-lg" href="/recipes"
+               sec:authorize="isAuthenticated()">All recipe</a>
+            <a class="btn btn-outline-primary btn-lg"
+               sec:authorize="isAnonymous()" th:href="@{/login}">Login to add your recipe</a>
+        </div>
+    </div>
+    <div class="row mb-2">
+        <h2 th:if="${recipes.size() == 0}" class="text-muted ml-auto mr-auto">List is empty!</h2>
+        <div th:object="${recipe}" th:each="recipe : ${recipes}" class="col-md-6">
+            <div class="row no-gutters border rounded overflow-hidden flex-md-row mb-4 shadow-sm h-md-250 position-relative">
+                <div class="col pl-4 pr-4 pt-4 pb-3 d-flex flex-column position-static">
+                    <h3 class="mb-0 text-break" id="title" th:text="*{title}">Title</h3>
+                    <div class="d-flex">
+                        <strong th:replace="~{fragments/difficulty :: difficulty(*{difficulty.toString()})}"></strong>
+                        <div class="mb-1 text-muted" th:text="'Cook time: ' + *{cookTime} + ' min'">Cook time</div>
+                    </div>
+                    <p class="card-text mb-auto text-break recipe-list-text" th:text="*{description}"></p>
+                    <a th:href="@{/recipes/__${recipe.id}__}" class="stretched-link">View details</a>
+                    <p class="card-text" th:text="*{user.nickname}"></p>
+                </div>
+                <div class="col-auto d-none d-lg-block recipe-list-image">
+                    <img class="recipe-list-image" src="" th:data-recipe-id="${recipe.id}">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script th:src="@{/js/recipe/list.js}"></script>
+</body>
+</html>
