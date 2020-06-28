@@ -55,8 +55,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="ingredient : ${recipe.ingredients}">
-            <th scope="row" th:text="${ingredient.id}"></th>
+        <tr th:each="ingredient, index : ${recipe.ingredients}">
+            <th scope="row" th:text="${index.index + 1}"></th>
             <td th:text="${ingredient.name}"></td>
             <td th:text="${ingredient.amount}"></td>
             <td th:text="${ingredient.measure}"></td>
